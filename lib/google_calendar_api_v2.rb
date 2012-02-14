@@ -4,6 +4,8 @@ module GoogleCalendarApiV2
   autoload :Calendar, 'google_calendar_api_v2/calendar'
   autoload :Event,    'google_calendar_api_v2/event'
 
+  autoload :AuthenticationError, 'google_calendar_api_v2/error/authentication'
+
   module Response
     autoload :Base,     'google_calendar_api_v2/response/base'
     autoload :Calendar, 'google_calendar_api_v2/response/calendar'
