@@ -30,7 +30,7 @@ module GoogleCalendarApiV2
       if success? response
         Response::Calendar.new(response, @connection)
       else
-        response
+        false
       end
     end
 

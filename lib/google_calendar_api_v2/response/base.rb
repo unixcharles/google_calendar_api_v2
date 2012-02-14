@@ -3,7 +3,7 @@ require 'json'
 module GoogleCalendarApiV2
   module Response
     module Base
-      attr_reader :response, :connection, :attributes
+      attr_reader :response, :attributes
 
       def initialize(response, connection, parent = nil)
         @response, @connection = response, connection
@@ -51,17 +51,6 @@ module GoogleCalendarApiV2
 
       def token
         @attributes['id'].split('/').last
-      end
-
-      private
-
-      def success?(response)
-        case response.code.to_i
-        when 200, 201
-          true
-        else
-          false
-        end
       end
 
     end
