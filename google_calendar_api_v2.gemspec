@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'google_calendar_api_v2'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.summary     = "Work with Google Calendar using GData 2.0 + OAuth 1.0"
   s.author      = ['Charles Barbier']
   s.email       = 'unixcharles@gmail.com'
@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
                        'lib/google_calendar_api_v2/client.rb',
                        'lib/google_calendar_api_v2/calendar.rb',
                        'lib/google_calendar_api_v2/event.rb',
+                       'lib/google_calendar_api_v2/error/authentication.rb',
                        'lib/google_calendar_api_v2/response/base.rb',
                        'lib/google_calendar_api_v2/response/calendar.rb',
                        'lib/google_calendar_api_v2/response/event.rb']
