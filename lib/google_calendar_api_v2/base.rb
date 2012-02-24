@@ -15,5 +15,10 @@ module GoogleCalendarApiV2
         false
       end
     end
+
+    def redirect?(response)
+      response.is_a? Net::HTTPRedirection
+    end
+
   end
 end

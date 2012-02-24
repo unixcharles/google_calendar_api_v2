@@ -29,21 +29,32 @@ module GoogleCalendarApiV2
         }.to_json
       end
 
-      def save
-        res = @connection.put @attributes['selfLink'], self.to_json, GoogleCalendarApiV2::Client::HEADERS
+      def save(url = nil, redirect_count = 0)
+        url ||= @attributes['selfLink']
+        response = @connection.put url, self.to_json, GoogleCalendarApiV2::Client::HEADERS
 
-        @attributes = JSON.parse(res.body)['data'] rescue @attributes
-        if success? res
+        raise 'Redirection Loop' if redirect_count > 3
+
+        if success? response
+          @attributes = JSON.parse(res.body)['data'] rescue @attributes
           true
+        elsif redirect? response
+          save(response['location'], redirect_count += 1)
         else
           false
         end
       end
 
-      def destroy
-        res = @connection.delete @attributes['selfLink'], GoogleCalendarApiV2::Client::HEADERS.merge({ 'If-Match' => '*' })
-        if success? res
+      def destroy(url = nil, redirect_count = 0)
+        url ||= @attributes['selfLink']
+        response = @connection.delete url, GoogleCalendarApiV2::Client::HEADERS.merge({ 'If-Match' => '*' })
+
+        raise 'Redirection Loop' if redirect_count > 3
+
+        if success? response
           true
+        elsif redirect? response
+          destroy(response['location'], redirect_count += 1)
         else
           false
         end
