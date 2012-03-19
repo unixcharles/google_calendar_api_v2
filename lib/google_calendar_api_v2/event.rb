@@ -16,9 +16,26 @@ module GoogleCalendarApiV2
       raise 'Redirection Loop' if redirect_count > 3
 
       if success? response
-        Response::Event.new(response, @connection, @calendar)
+        item = JSON.parse(response.body)['data']
+        Response::Event.new(item, @connection, @calendar)
       elsif redirect? response
         find(event_token, response['location'], redirect_count += 1)
+      end
+    end
+
+    def all(url = nil, redirect_count = 0)
+      url ||= "https://www.google.com/calendar/feeds/#{@calendar.token}/private/full?alt=jsonc&futureevents=false"
+      response = @connection.get url, Client::HEADERS
+
+      if success? response
+        # Response::Event.new(response, @connection, @calendar)
+        if items = JSON.parse(response.body)['data']['items']
+          items.map {|item| Response::Event.new(item, @connection, @calendar) }
+        else
+          []
+        end
+      elsif redirect? response
+        all(response['location'], redirect_count += 1)
       end
     end
 
@@ -36,7 +53,8 @@ module GoogleCalendarApiV2
       raise 'Redirection Loop' if redirect_count > 3
 
       if success? response
-        Response::Event.new(response, @connection, @calendar)
+        item = JSON.parse(response.body)['data']
+        Response::Event.new(item, @connection, @calendar)
       elsif redirect? response
         create(params, response['location'], redirect_count += 1)
       else

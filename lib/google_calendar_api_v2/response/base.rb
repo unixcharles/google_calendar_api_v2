@@ -5,9 +5,9 @@ module GoogleCalendarApiV2
     module Base
       attr_reader :response, :attributes
 
-      def initialize(response, connection, parent = nil)
+      def initialize(item, connection, parent = nil)
         @response, @connection = response, connection
-        @attributes = JSON.parse(response.body)['data'] rescue {}
+        @attributes = item
       end
 
       def update_attributes(attributes)
